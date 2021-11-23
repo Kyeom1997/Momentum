@@ -1,9 +1,27 @@
-const images = ["0.jpg", "1.jpg", "2.jpg", "3.jpg"];
+const body = document.querySelector("body");
 
-const chosenImage = images[Math.floor(Math.random * images.length)];
+const IMG_NUMBER = 6;
 
-const bgImage = document.createElement("img");
+function handleImgLoad() {
+  console.log("finised loaded");
+}
 
-bgImage.src = `img/${chosenImage}`;
+function paintImage(imgNumber) {
+  const image = new Image();
+  image.src = `images/${imgNumber + 1}.jpg`;
+  image.classList.add("bgImage");
+  body.appendChild(image);
+  image.addEventListener("loaded", handleImgLoad);
+}
 
-document.body.appendChild(bgImage);
+function getRandom() {
+  const number = Math.floor(Math.random() * IMG_NUMBER);
+  return number;
+}
+
+function init() {
+  const randomNumber = getRandom();
+  paintImage(randomNumber);
+}
+
+init();
