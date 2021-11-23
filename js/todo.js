@@ -1,30 +1,24 @@
-const toDoForm = document.querySelector(".js-todoForm"),
-  toDoInput = toDoForm.querySelector("input"),
+const toDoFrom = document.querySelector(".js-toDoForm"),
+  toDoInput = toDoFrom.querySelector("input"),
   toDoList = document.querySelector(".js-toDoList");
 
 const TODOS_LS = "toDos";
 
 let toDos = [];
 
-function loadToDos() {
-  const loadedToDos = localStorage.getItem(TODOS_LS);
-  if (loadedToDos !== null) {
-    const parsedToDos = JSON.parse(loadedToDos);
-    parsedToDos.forEach((todo) => {
-      console.log(todo.text);
-      paintToDo(todo.text);
-    });
-  }
-}
-
 function deleteToDo(event) {
+  //console.log(event.target.parentNode);
+
+  // html만 지우기
   const btn = event.target;
   const li = btn.parentNode;
   toDoList.removeChild(li);
-  // 필터는 array의 모든 아이템을 통해 함수를 실행하고, true인 아이템만 가지고 새로운 array를 만든다.
-  const cleanToDos = toDos.filter((toDo) => {
+  //True인 값으로만 다시 Array를 만든다.
+  const cleanToDos = toDos.filter(function (toDo) {
+    //console.log(toDo.id, li.id);
     return toDo.id !== parseInt(li.id);
   });
+  console.log(cleanToDos);
   toDos = cleanToDos;
   saveToDos();
 }
@@ -35,19 +29,18 @@ function saveToDos() {
 
 function paintToDo(text) {
   const li = document.createElement("li");
+  const delBtn = document.createElement("button");
   const span = document.createElement("span");
-  const delBtn = document.createElement("i");
   const newId = toDos.length + 1;
-
-  delBtn.className = "btn fas fa-trash-alt";
+  const delBtnCL = "delBtn";
+  delBtn.innerText = "❌";
   delBtn.addEventListener("click", deleteToDo);
-
+  delBtn.classList.add(delBtnCL);
   span.innerText = text;
   li.appendChild(span);
   li.appendChild(delBtn);
   li.id = newId;
   toDoList.appendChild(li);
-
   const toDoObj = {
     text: text,
     id: newId,
@@ -63,9 +56,19 @@ function handleSubmit(event) {
   toDoInput.value = "";
 }
 
+function loadToDos() {
+  const loadedTodos = localStorage.getItem(TODOS_LS);
+  if (loadedTodos !== null) {
+    const parsedToDos = JSON.parse(loadedTodos);
+    parsedToDos.forEach(function (toDo) {
+      paintToDo(toDo.text);
+    });
+  }
+}
+
 function init() {
   loadToDos();
-  toDoForm.addEventListener("submit", handleSubmit);
+  toDoFrom.addEventListener("submit", handleSubmit);
 }
 
 init();
