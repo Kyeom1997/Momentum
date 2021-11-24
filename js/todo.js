@@ -1,5 +1,5 @@
-const toDoFrom = document.querySelector(".js-toDoForm"),
-  toDoInput = toDoFrom.querySelector("input"),
+const toDoForm = document.querySelector(".js-toDoForm"),
+  toDoInput = toDoForm.querySelector("input"),
   toDoList = document.querySelector(".js-toDoList");
 
 const TODOS_LS = "toDos";
@@ -7,18 +7,12 @@ const TODOS_LS = "toDos";
 let toDos = [];
 
 function deleteToDo(event) {
-  //console.log(event.target.parentNode);
-
-  // html만 지우기
   const btn = event.target;
   const li = btn.parentNode;
   toDoList.removeChild(li);
-  //True인 값으로만 다시 Array를 만든다.
   const cleanToDos = toDos.filter(function (toDo) {
-    //console.log(toDo.id, li.id);
     return toDo.id !== parseInt(li.id);
   });
-  console.log(cleanToDos);
   toDos = cleanToDos;
   saveToDos();
 }
@@ -32,13 +26,11 @@ function paintToDo(text) {
   const delBtn = document.createElement("button");
   const span = document.createElement("span");
   const newId = toDos.length + 1;
-  const delBtnCL = "delBtn";
   delBtn.innerText = "❌";
   delBtn.addEventListener("click", deleteToDo);
-  delBtn.classList.add(delBtnCL);
   span.innerText = text;
-  li.appendChild(span);
   li.appendChild(delBtn);
+  li.appendChild(span);
   li.id = newId;
   toDoList.appendChild(li);
   const toDoObj = {
@@ -57,9 +49,9 @@ function handleSubmit(event) {
 }
 
 function loadToDos() {
-  const loadedTodos = localStorage.getItem(TODOS_LS);
-  if (loadedTodos !== null) {
-    const parsedToDos = JSON.parse(loadedTodos);
+  const loadedToDos = localStorage.getItem(TODOS_LS);
+  if (loadedToDos !== null) {
+    const parsedToDos = JSON.parse(loadedToDos);
     parsedToDos.forEach(function (toDo) {
       paintToDo(toDo.text);
     });
@@ -68,7 +60,7 @@ function loadToDos() {
 
 function init() {
   loadToDos();
-  toDoFrom.addEventListener("submit", handleSubmit);
+  toDoForm.addEventListener("submit", handleSubmit);
 }
 
 init();
